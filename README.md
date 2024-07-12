@@ -35,4 +35,5 @@ The `note.html` file includes the following sections and features:
 To use the note-taking application, open the `note.html` file in a web browser. You can add, edit, and delete notes, and your notes will be saved in the browser's local storage.
 
 ## Screenshot
-![Note Taking Website Screenshot](https://github.com/your-username/your-repo-name/blob/main/note.png)
+![NOTE](https://github.com/user-attachments/assets/608ff74e-44a3-434a-9d61-14a442e40cae)
+
