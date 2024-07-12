@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Taking Website</title>
+    <style>
+        body {
+            background-color: #aa7fd6; /* Dark violet */
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #4B0082; /* Darker violet */
+        }
+        header h1 {
+            margin: 0;
+        }
+        #note-section {
+            text-align: left;
+            margin: 50px 20px 0 20px;
+        }
+        #note-section textarea {
+            width: 80%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .note {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #fff;
+            text-align: left;
+            color: black;
+            width: 300px; /* Set a fixed width */
+            position: relative;
+        }
+        .note textarea {
+            width: 100%;
+            height: 50px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            color: black;
+            border: none;
+            outline: none;
+            resize: none;
+        }
+        .note .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Quick Note</h1>
+        <button onclick="addNote()">Add Note</button>
+    </header>
+    <section id="note-section">
+        <div id="notes"></div>
+    </section>
+    <script>
+        function addNote() {
+            const notes = getNotesFromLocalStorage();
+            notes.push('');
+            localStorage.setItem('notes', JSON.stringify(notes));
+            loadNotes();
+        }
+
+        function getNotesFromLocalStorage() {
+            const notes = localStorage.getItem('notes');
+            return notes ? JSON.parse(notes) : [];
+        }
+
+        function loadNotes() {
+            const notes = getNotesFromLocalStorage();
+            const notesContainer = document.getElementById('notes');
+            notesContainer.innerHTML = '';
+            notes.forEach((note, index) => {
+                const noteDiv = document.createElement('div');
+                noteDiv.className = 'note';
+                const noteText = document.createElement('textarea');
+                noteText.value = note;
+                noteText.addEventListener('input', function(e) {
+                    notes[index] = e.target.value;
+                    localStorage.setItem('notes', JSON.stringify(notes));
+                });
+                noteText.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                    }
+                });
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '✖';
+                deleteButton.className = 'delete-button';
+                deleteButton.onclick = function() {
+                    deleteNoteAndReload(index);
+                };
+                noteDiv.appendChild(noteText);
+                noteDiv.appendChild(deleteButton);
+                notesContainer.appendChild(noteDiv);
+            });
+        }
+
+        function deleteNoteAndReload(index) {
+            const notes = getNotesFromLocalStorage();
+            notes.splice(index, 1);
+            localStorage.setItem('notes', JSON.stringify(notes));
+            loadNotes();
+        }
+
+        loadNotes();
+    </script>
+</body>
+</html>
